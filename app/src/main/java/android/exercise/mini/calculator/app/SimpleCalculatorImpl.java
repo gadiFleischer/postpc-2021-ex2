@@ -4,37 +4,73 @@ import java.io.Serializable;
 
 public class SimpleCalculatorImpl implements SimpleCalculator {
 
-  // todo: add fields as needed
-
+  private String outputStr = "";
+  private int res= 0;
+  private String curNum = "";
+  private String lastAction = "";
   @Override
   public String output() {
     // todo: return output based on the current state
-    return "implement me please";
+    return this.outputStr;
   }
 
   @Override
   public void insertDigit(int digit) {
-    // todo: insert a digit
+    String digitStr = String.valueOf(digit);
+    this.curNum += digitStr;
+    this.outputStr+=digitStr;
   }
 
   @Override
   public void insertPlus() {
-    // todo: insert a plus
+    if(!this.curNum.equals("")) {
+      this.outputStr+="+";
+      calcRes();
+      this.lastAction="+";
+    }
   }
 
   @Override
   public void insertMinus() {
-    // todo: insert a minus
+    if(!this.curNum.equals("")) {
+      this.outputStr+="-";
+      calcRes();
+      this.lastAction="-";
+    }
+  }
+
+  private void calcRes() {
+    if(this.lastAction.equals("")){
+      this.res = Integer.parseInt(this.curNum);
+    } else if (this.lastAction.equals("+")) {
+      this.res += Integer.parseInt(this.curNum);
+    } else {
+      this.res -= Integer.parseInt(this.curNum);
+    }
+    this.curNum="";
   }
 
   @Override
   public void insertEquals() {
+    calcRes();
+    this.lastAction="";
+    this.outputStr=String.valueOf(this.res);
     // todo: calculate the equation. after calling `insertEquals()`, the output should be the result
     //  e.g. given input "14+3", calling `insertEquals()`, and calling `output()`, output should be "17"
   }
 
   @Override
   public void deleteLast() {
+    if(!this.outputStr.equals("")){
+      String lastChar = this.outputStr.substring(this.outputStr.length() - 1);
+      if(lastChar.equals("+") || lastChar.equals("-")){
+        this.lastAction="";
+      }else{
+        this.outputStr=this.outputStr.length()==0?"": this.outputStr.substring(0, this.outputStr.length() - 1);
+        this.curNum=this.curNum.length()==0?"":this.curNum.substring(0, this.curNum.length() - 1);
+      }
+    }
+
     // todo: delete the last input (digit, plus or minus)
     //  e.g.
     //  if input was "12+3" and called `deleteLast()`, then delete the "3"
@@ -44,13 +80,16 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
 
   @Override
   public void clear() {
-    // todo: clear everything (same as no-input was never given)
+    this.outputStr = "";
+    this.res= 0;
+    this.curNum = "";
+    this.lastAction = "";
   }
 
   @Override
   public Serializable saveState() {
     CalculatorState state = new CalculatorState();
-    // todo: insert all data to the state, so in the future we can load from this state
+    state.setState(this.outputStr,this.res,this.curNum,this.lastAction);
     return state;
   }
 
@@ -60,10 +99,38 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
       return; // ignore
     }
     CalculatorState casted = (CalculatorState) prevState;
-    // todo: use the CalculatorState to load
+    this.outputStr=casted.getOutputStr();
+    this.curNum=casted.getCurNum();
+    this.lastAction=casted.lastAction;
+    this.res=casted.getRes();
   }
 
   private static class CalculatorState implements Serializable {
+    private String outputStr = "";
+    private int res= 0;
+    private String curNum = "";
+    private String lastAction = "";
+
+    public void setState(String output, int res, String curNum, String lastAction){
+      this.outputStr=output;
+      this.res=res;
+      this.curNum=curNum;
+      this.lastAction=lastAction;
+    }
+    public String getOutputStr(){
+      return this.outputStr;
+    }
+    public String getCurNum(){
+      return this.curNum;
+    }
+    public String getLastAction(){
+      return this.lastAction;
+    }
+    public int getRes(){
+      return this.res;
+    }
+
+
     /*
     TODO: add fields to this class that will store the calculator state
     all fields must only be from the types:
