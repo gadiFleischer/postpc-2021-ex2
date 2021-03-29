@@ -8,18 +8,24 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
   private int res= 0;
   @Override
   public String output() {
-    return this.outputStr;
+
+    return this.outputStr.length()==0?"0":this.outputStr;
   }
 
   @Override
   public void insertDigit(int digit) {
+    if(digit<0||digit>9){
+      throw new IllegalArgumentException();
+    }
     String digitStr = String.valueOf(digit);
     this.outputStr+=digitStr;
   }
 
   @Override
   public void insertPlus() {
-    if(!this.outputStr.equals("")) {
+    if(this.outputStr.equals("")) {
+      this.outputStr="0+";
+    } else{
       String lastChar = this.outputStr.substring(this.outputStr.length() - 1);
       if(!lastChar.equals("+") && !lastChar.equals("-"))
       this.outputStr+="+";
@@ -28,7 +34,9 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
 
   @Override
   public void insertMinus() {
-    if(!this.outputStr.equals("")) {
+    if(this.outputStr.equals("")) {
+      this.outputStr="0-";
+    }else{
       String lastChar = this.outputStr.substring(this.outputStr.length() - 1);
       if(!lastChar.equals("+") && !lastChar.equals("-"))
         this.outputStr+="-";
@@ -36,6 +44,9 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
   }
 
   private void calcRes() {
+    if(this.outputStr.charAt(0) == '-'){
+        this.outputStr="0"+this.outputStr;
+    }
     String[] parts = this.outputStr.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
     double result = Double.parseDouble(parts[0]);
     for (int i = 1; i < parts.length; i += 2) {
@@ -64,7 +75,7 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
     if(!lastChar.equals("+") && !lastChar.equals("-")){
       calcRes();
       this.outputStr=String.valueOf(this.res);
-    } //else print invalid operation
+    }
   }
 
   @Override
@@ -83,7 +94,7 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
   @Override
   public Serializable saveState() {
     CalculatorState state = new CalculatorState();
-    state.setState(this.outputStr,this.res);
+    state.setState(this.outputStr);
     return state;
   }
 
@@ -94,22 +105,17 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
     }
     CalculatorState casted = (CalculatorState) prevState;
     this.outputStr=casted.getOutputStr();
-    this.res=casted.getRes();
   }
 
   private static class CalculatorState implements Serializable {
     private String outputStr = "";
-    private int res= 0;
 
-    public void setState(String output, int res){
+    public void setState(String output){
       this.outputStr=output;
-      this.res=res;
     }
     public String getOutputStr(){
       return this.outputStr;
     }
-    public int getRes(){
-      return this.res;
-    }
+
   }
 }

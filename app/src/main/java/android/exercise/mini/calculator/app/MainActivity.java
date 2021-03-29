@@ -12,12 +12,13 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity {
 
   @VisibleForTesting
   public SimpleCalculator calculator;
-  private int calcOutput=0;
-  private String calcStr;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +26,9 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     if (calculator == null) {
       calculator = new SimpleCalculatorImpl();
-//      savedInstanceState.putInt("calc_output",0);
-//      savedInstanceState.putString("calc_str_output","");
     }
-//    calcStr =  savedInstanceState.getString("calc_str_output");
-//    calcOutput = savedInstanceState.getInt("calc_output");
-//    //find all views
+
+    //find all views
     TextView button0 = findViewById(R.id.button0);
     TextView button1 = findViewById(R.id.button1);
     TextView button2 = findViewById(R.id.button2);
@@ -50,9 +48,8 @@ public class MainActivity extends AppCompatActivity {
     TextView buttonEquals = findViewById(R.id.buttonEquals);
     TextView textViewOutput = findViewById(R.id.textViewCalculatorOutput);
     textViewOutput.setText("");
-//    textViewOutput.setText(savedInstanceState.getInt("calc_output"));
 
-//    // set listeners
+    // set listeners
     button0.setOnClickListener(v -> {
       calculator.insertDigit(0);
       textViewOutput.setText(calculator.output());
@@ -114,29 +111,27 @@ public class MainActivity extends AppCompatActivity {
       textViewOutput.setText(calculator.output());
     });
 
-
-
-    /*
-    TODO:
-    - find all views
-    - initial update main text-view based on calculator's output
-    - set click listeners on all buttons to operate on the calculator and refresh main text-view
-     */
   }
 
   @Override
   protected void onSaveInstanceState(@NonNull Bundle outState) {
     super.onSaveInstanceState(outState);
-//    outState.putInt("calc_output",calcOutput);
-    // todo: save calculator state into the bundle
+    TextView textViewOutput = findViewById(R.id.textViewCalculatorOutput);
+    calculator.saveState();
+    outState.putString("output",textViewOutput.getText().toString());
   }
 
   @Override
   protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
-//    savedInstanceState.putInt("calc_output",0);
-//    TextView textViewOutput = findViewById(R.id.textViewCalculatorOutput);
-//    textViewOutput.setText(0);
+//    Serializable savedState = calculator.saveState();
+//    Serializable state = new Serializable() {
+//      String output = savedInstanceState.getString("output");
+//    };
+//    calculator.loadState(state);
+//    calculator.loadState(savedInstanceState.putSerializable("a",1));
+
+
     // todo: restore calculator state from the bundle, refresh main text-view from calculator's output
   }
 }
