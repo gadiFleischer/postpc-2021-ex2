@@ -57,6 +57,7 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
     this.outputStr=String.valueOf(this.res);
     // todo: calculate the equation. after calling `insertEquals()`, the output should be the result
     //  e.g. given input "14+3", calling `insertEquals()`, and calling `output()`, output should be "17"
+    System.out.println(this.res);
   }
 
   @Override
@@ -66,16 +67,10 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
       if(lastChar.equals("+") || lastChar.equals("-")){
         this.lastAction="";
       }else{
-        this.outputStr=this.outputStr.length()==0?"": this.outputStr.substring(0, this.outputStr.length() - 1);
+        this.outputStr= this.outputStr.substring(0, this.outputStr.length() - 1);
         this.curNum=this.curNum.length()==0?"":this.curNum.substring(0, this.curNum.length() - 1);
       }
     }
-
-    // todo: delete the last input (digit, plus or minus)
-    //  e.g.
-    //  if input was "12+3" and called `deleteLast()`, then delete the "3"
-    //  if input was "12+" and called `deleteLast()`, then delete the "+"
-    //  if no input was given, then there is nothing to do here
   }
 
   @Override
@@ -101,7 +96,7 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
     CalculatorState casted = (CalculatorState) prevState;
     this.outputStr=casted.getOutputStr();
     this.curNum=casted.getCurNum();
-    this.lastAction=casted.lastAction;
+    this.lastAction=casted.getLastAction();
     this.res=casted.getRes();
   }
 
@@ -129,15 +124,5 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
     public int getRes(){
       return this.res;
     }
-
-
-    /*
-    TODO: add fields to this class that will store the calculator state
-    all fields must only be from the types:
-    - primitives (e.g. int, boolean, etc)
-    - String
-    - ArrayList<> where the type is a primitive or a String
-    - HashMap<> where the types are primitives or a String
-     */
   }
 }
