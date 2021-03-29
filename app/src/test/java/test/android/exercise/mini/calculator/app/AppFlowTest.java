@@ -86,27 +86,7 @@ public class AppFlowTest {
 
     assertEquals("11", textViewOutput.getText().toString());
   }
-  @Test
-  public void flowTest11(){
-    // run clicks on "7+5<clear>4="
-    for (View button: Arrays.asList(
-            button7, buttonPlus, button5, buttonClear, button4, buttonEquals
-    )) {
-      button.performClick();
-    }
-    assertEquals("4", textViewOutput.getText().toString());
-  }
-  @Test
-  public void flowTest12(){
-    // run clicks on "7+++"
-    for (View button: Arrays.asList(
-            button7, buttonPlus, buttonPlus, buttonPlus
-    )) {
-      button.performClick();
-    }
 
-    assertEquals("7+", textViewOutput.getText().toString());
-  }
   @Test
   public void flowTest3(){
     // run clicks on "7<backspace>4="
@@ -194,5 +174,26 @@ public class AppFlowTest {
     }
 
     assertEquals("18", textViewOutput.getText().toString());
+  }
+  @Test
+  public void flowTest11(){
+    // run clicks on "7+5<clear>4="
+    for (View button: Arrays.asList(
+            button7, buttonPlus, button5, buttonClear, button4, buttonEquals
+    )) {
+      button.performClick();
+    }
+    assertEquals("4", textViewOutput.getText().toString());
+  }
+  @Test
+  public void flowTest12(){
+    // run clicks on "7+++"
+    for (View button: Arrays.asList(
+            button7, buttonPlus, buttonPlus, buttonPlus
+    )) {
+      button.performClick();
+    }
+
+    assertEquals("7+", textViewOutput.getText().toString());
   }
 }
