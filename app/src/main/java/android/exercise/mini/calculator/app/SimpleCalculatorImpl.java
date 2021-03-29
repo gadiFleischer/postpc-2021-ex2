@@ -10,7 +10,6 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
   private String lastAction = "";
   @Override
   public String output() {
-    // todo: return output based on the current state
     return this.outputStr;
   }
 
@@ -32,11 +31,10 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
 
   @Override
   public void insertMinus() {
-    if(!this.curNum.equals("")) {
+    if(!this.curNum.equals(""))
       this.outputStr+="-";
       calcRes();
       this.lastAction="-";
-    }
   }
 
   private void calcRes() {
@@ -55,9 +53,7 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
     calcRes();
     this.lastAction="";
     this.outputStr=String.valueOf(this.res);
-    // todo: calculate the equation. after calling `insertEquals()`, the output should be the result
-    //  e.g. given input "14+3", calling `insertEquals()`, and calling `output()`, output should be "17"
-    System.out.println(this.res);
+    this.curNum= String.valueOf(this.res);
   }
 
   @Override
@@ -67,9 +63,9 @@ public class SimpleCalculatorImpl implements SimpleCalculator {
       if(lastChar.equals("+") || lastChar.equals("-")){
         this.lastAction="";
       }else{
-        this.outputStr= this.outputStr.substring(0, this.outputStr.length() - 1);
         this.curNum=this.curNum.length()==0?"":this.curNum.substring(0, this.curNum.length() - 1);
       }
+      this.outputStr= this.outputStr.substring(0, this.outputStr.length() - 1);
     }
   }
 
