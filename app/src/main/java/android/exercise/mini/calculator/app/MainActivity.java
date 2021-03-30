@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     TextView buttonMinus = findViewById(R.id.buttonMinus);
     TextView buttonEquals = findViewById(R.id.buttonEquals);
     TextView textViewOutput = findViewById(R.id.textViewCalculatorOutput);
-    textViewOutput.setText("");
 
     // set listeners
     button0.setOnClickListener(v -> {
@@ -118,19 +117,15 @@ public class MainActivity extends AppCompatActivity {
     super.onSaveInstanceState(outState);
     TextView textViewOutput = findViewById(R.id.textViewCalculatorOutput);
     calculator.saveState();
-    outState.putString("output",textViewOutput.getText().toString());
+    outState.putSerializable("output",textViewOutput.getText().toString());
   }
 
   @Override
   protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
-//    Serializable savedState = calculator.saveState();
-//    Serializable state = new Serializable() {
-//      String output = savedInstanceState.getString("output");
-//    };
-//    calculator.loadState(state);
-//    calculator.loadState(savedInstanceState.putSerializable("a",1));
-
+    calculator.loadState(savedInstanceState.getSerializable("output"));
+    TextView textViewOutput = findViewById(R.id.textViewCalculatorOutput);
+    textViewOutput.setText(calculator.output());
 
     // todo: restore calculator state from the bundle, refresh main text-view from calculator's output
   }
